@@ -1,13 +1,13 @@
 import { Router } from 'express';
-import { ImageApiService } from '../services/image-api.service';
+import { ImageExternalProviderService } from '../modules/image-external-provider/image-external-provider.service';
 
 const router = Router();
 
-const imagesApiService = new ImageApiService();
+const imageExternalProvider = new ImageExternalProviderService();
 
 router.post('/login', async (_req, res) => {
   try {
-    const token = await imagesApiService.getAuthToken();
+    const token = await imageExternalProvider.getAuthToken();
     res.json({ token });
   } catch (error) {
     res.sendStatus(500);
