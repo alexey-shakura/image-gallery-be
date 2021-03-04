@@ -1,4 +1,4 @@
-import { IImageDetails } from "../../image-external-provider/types";
+import { IImageDetails } from "../../external-provider/types";
 
 export interface IMatchData {
   score: number;

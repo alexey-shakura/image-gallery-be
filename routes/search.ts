@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import { ImageSearchEngineService } from '../modules/image-search-engine/image-search-engine.service';
-import { ImageStorageService } from '../modules/image-storage/image-storage.service';
+import { SearchEngineService } from '../modules/search-engine/search-engine.service';
+import { StorageService } from '../modules/storage/storage.service';
 
 const router = Router();
-const storage = ImageStorageService.create();
-const searchEngine = new ImageSearchEngineService();
+const storage = StorageService.create();
+const searchEngine = new SearchEngineService();
 
 
 router.get('/:searchTerm', async (req, res) => {

@@ -1,38 +1,35 @@
 import EventEmitter from "events";
-import { ImageExternalProviderService } from "../image-external-provider/image-external-provider.service";
-import { IImageDetails, IImagesPage } from "../image-external-provider/types";
+import { ExternalProviderService } from "../external-provider/external-provider.service";
+import { IImageDetails, IImagesPage } from "../external-provider/types";
 import { StorageState } from "./enums";
 
-export class ImageStorageService {
+export class StorageService {
 
-  public static create(): ImageStorageService {
-    if (!ImageStorageService.instance) {
-      ImageStorageService.instance = new ImageStorageService();
+  public static create(): StorageService {
+    if (!StorageService.instance) {
+      StorageService.instance = new StorageService();
     }
 
-    return ImageStorageService.instance;
+    return StorageService.instance;
   }
 
-  private static instance: ImageStorageService | null = null;
+  private static instance: StorageService | null = null;
 
   private imageInfo: IImageDetails[] = [];
 
   private _token: string | null = null;
-  private readonly externalProviderService = new ImageExternalProviderService();
+  private readonly externalProviderService = new ExternalProviderService();
 
   private eventEmitter: EventEmitter = new EventEmitter();
   private currentState: StorageState = StorageState.DEFAULT;
 
   protected constructor() {
-    console.log('initialized');
-
     setTimeout(async () => {
       try {
         this.currentState = StorageState.LOADING;
 
         await this.load();
 
-        console.log('cache loaded');
         this.currentState = StorageState.LOADED;
         this.eventEmitter.emit(this.currentState)
       } catch (error) {
@@ -51,7 +48,6 @@ export class ImageStorageService {
 
     try {
       this.imageInfo = await this.getAllImagesInfo();
-      console.log(this.imageInfo[0]);
     } catch (error) {
       if (error.response && error.response.status === 401) {
         this._token = null;
@@ -99,8 +95,6 @@ export class ImageStorageService {
 
       page++;
     }
-
-    console.log('total pages ' + page );
 
     return data;
   }

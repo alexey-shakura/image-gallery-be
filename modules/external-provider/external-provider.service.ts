@@ -1,12 +1,12 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { IAuthRequestBody, IAuthResponse, IImageDetails, IImagesPage } from './types';
 
-export class ImageExternalProviderService {
+export class ExternalProviderService {
 
   private axiosInstance;
 
   public constructor() {
-    const baseUrl = process.env.IMAGE_EXTERNAL_PROVIDER_BASE_URL;
+    const baseUrl = process.env.EXTERNAL_PROVIDER_BASE_URL;
 
     if (!baseUrl) {
       throw new Error('Set external provider base url');
@@ -16,7 +16,7 @@ export class ImageExternalProviderService {
   }
 
   public async getAuthToken(): Promise<string> {
-    const apiKey = process.env.IMAGE_EXTERNAL_PROVIDER_API_KEY;
+    const apiKey = process.env.EXTERNAL_PROVIDER_API_KEY;
 
     if (!apiKey) {
       throw new Error('Set external provider API key');

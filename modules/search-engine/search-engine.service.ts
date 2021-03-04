@@ -1,7 +1,7 @@
-import { IImageDetails } from "../image-external-provider/types";
+import { IImageDetails } from "../external-provider/types";
 import { IMatchData } from "./types";
 
-export class ImageSearchEngineService {
+export class SearchEngineService {
 
   private readonly searchKeys: (keyof IImageDetails)[] = ['author', 'camera', 'tags'];
 
