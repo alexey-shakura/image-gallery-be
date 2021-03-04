@@ -10,7 +10,7 @@ const service = new ImageExternalProviderService();
 router.get('/', async (req, res) => {
   try {
     const token = req.headers['x-access-token'];
-    const images = await service.getPage(token as string, 27) as any;
+    const images = await service.getImagesPage(token as string, 27) as any;
 
     console.log(images);
 
@@ -40,7 +40,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async(req, res) => {
   try {
     const token = req.headers['x-access-token'];
-    const images = await service.getDetails(token as string, 'd9498ac8c60009730574') as any;
+    const images = await service.getImageDetails(token as string, 'd9498ac8c60009730574') as any;
 
     res.json(images);
   } catch (error) {
