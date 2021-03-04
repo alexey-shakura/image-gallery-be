@@ -10,7 +10,6 @@ export class SearchEngineService {
       return data;
     }
 
-
     const matchesData: IMatchData[] = data
       .map((imageDetails) => {
         const score = this.getEntityScore(imageDetails, searchTerm)

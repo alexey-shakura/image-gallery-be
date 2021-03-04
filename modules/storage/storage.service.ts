@@ -15,12 +15,12 @@ export class StorageService {
 
   private static instance: StorageService | null = null;
 
-  private imageInfo: IImageDetails[] = [];
+  private imagesDetails: IImageDetails[] = [];
 
   private _token: string | null = null;
   private readonly externalProviderService = new ExternalProviderService();
 
-  private eventEmitter: EventEmitter = new EventEmitter();
+  private stateEventEmitter: EventEmitter = new EventEmitter();
   private currentState: StorageState = StorageState.DEFAULT;
 
   protected constructor() {
@@ -31,10 +31,10 @@ export class StorageService {
         await this.load();
 
         this.currentState = StorageState.LOADED;
-        this.eventEmitter.emit(this.currentState)
+        this.stateEventEmitter.emit(this.currentState)
       } catch (error) {
         this.currentState = StorageState.ERROR;
-        this.eventEmitter.emit(this.currentState);
+        this.stateEventEmitter.emit(this.currentState);
       }
     }, this.getExpirationTime());
   }
@@ -47,7 +47,7 @@ export class StorageService {
     }
 
     try {
-      this.imageInfo = await this.getAllImagesInfo();
+      this.imagesDetails = await this.getAllImagesInfo();
     } catch (error) {
       if (error.response && error.response.status === 401) {
         this._token = null;
@@ -60,18 +60,18 @@ export class StorageService {
 
   public getAll(): Promise<IImageDetails[]> {
     if (this.currentState === StorageState.LOADED) {
-      return Promise.resolve(this.imageInfo);
+      return Promise.resolve(this.imagesDetails);
     }
 
     return new Promise((resolve, reject) => {
-      this.eventEmitter.once(StorageState.LOADED, () => {
-        resolve(this.imageInfo);
-        this.eventEmitter.removeAllListeners(StorageState.ERROR);
+      this.stateEventEmitter.once(StorageState.LOADED, () => {
+        resolve(this.imagesDetails);
+        this.stateEventEmitter.removeAllListeners(StorageState.ERROR);
       });
 
-      this.eventEmitter.once(StorageState.ERROR, () => {
+      this.stateEventEmitter.once(StorageState.ERROR, () => {
         reject();
-        this.eventEmitter.removeAllListeners(StorageState.LOADED);
+        this.stateEventEmitter.removeAllListeners(StorageState.LOADED);
       });
     });
   }
